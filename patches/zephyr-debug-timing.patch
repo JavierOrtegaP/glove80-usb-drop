@@ -1,0 +1,320 @@
+diff --git a/drivers/usb/device/usb_dc_nrfx.c b/drivers/usb/device/usb_dc_nrfx.c
+index a8032ba..b06c9d2 100644
+--- a/drivers/usb/device/usb_dc_nrfx.c
++++ b/drivers/usb/device/usb_dc_nrfx.c
+@@ -182,6 +182,29 @@ struct usbd_event {
+ K_MEM_SLAB_DEFINE(fifo_elem_slab, FIFO_ELEM_SZ,
+ 		  CONFIG_USB_NRFX_EVT_QUEUE_SIZE, FIFO_ELEM_ALIGN);
+ 
++/* glove80-usb-drop debug: measure how long queued events wait for the USB work
++ * queue. dbg_wait_since is the cycle count when the first event was queued after
++ * the work handler last ran (0 = nothing waiting). SOF events are skipped while
++ * the pool is nearly full, so a long stall is measured instead of overflowing the
++ * pool and switching USB off as the stock driver does.
++ */
++#define DBG_SOF_RESERVE 4
++static volatile uint32_t dbg_wait_since;
++static volatile uint32_t dbg_wait_peak;
++static volatile uint32_t dbg_sof_skipped;
++
++static inline void dbg_note_queued(void)
++{
++	uint32_t used = k_mem_slab_num_used_get(&fifo_elem_slab);
++
++	if (used > dbg_wait_peak) {
++		dbg_wait_peak = used;
++	}
++	if (!dbg_wait_since) {
++		dbg_wait_since = k_cycle_get_32() | 1;
++	}
++}
++
+ 
+ /** Number of IN Endpoints configured (including control) */
+ #define CFG_EPIN_CNT (DT_INST_PROP(0, num_in_endpoints) +	\
+@@ -464,6 +487,7 @@ static inline struct usbd_event *usbd_evt_alloc(void)
+ 
+ 	ev = (struct usbd_event *)block.data;
+ 	ev->block = block;
++	dbg_note_queued();
+ 
+ 	return ev;
+ }
+@@ -1075,6 +1099,11 @@ static void usbd_event_handler(nrfx_usbd_evt_t const *const p_event)
+ 		break;
+ 	case NRFX_USBD_EVT_SOF:
+ 		if (IS_ENABLED(CONFIG_USB_DEVICE_SOF)) {
++			if (k_mem_slab_num_free_get(&fifo_elem_slab) <= DBG_SOF_RESERVE) {
++				dbg_sof_skipped++;
++				dbg_note_queued();
++				break;
++			}
+ 			evt.evt_type = USBD_EVT_SOF;
+ 			put_evt = true;
+ 		}
+@@ -1212,6 +1241,30 @@ static void usbd_work_handler(struct k_work *item)
+ 
+ 	ctx = CONTAINER_OF(item, struct nrf_usbd_ctx, usb_work);
+ 
++	{
++		unsigned int key = irq_lock();
++		uint32_t since = dbg_wait_since;
++		uint32_t peak = dbg_wait_peak;
++		uint32_t skipped = dbg_sof_skipped;
++
++		dbg_wait_since = 0;
++		dbg_wait_peak = 0;
++		dbg_sof_skipped = 0;
++		irq_unlock(key);
++
++		if (since) {
++			uint32_t waited_us = k_cyc_to_us_floor32((k_cycle_get_32() | 1) - since);
++
++			if (waited_us >= 5000) {
++				LOG_WRN("dbg usb: events waited %u us for the work queue, "
++					"peak %u of %u slots, %u SOF skipped%s",
++					waited_us, peak, CONFIG_USB_NRFX_EVT_QUEUE_SIZE, skipped,
++					(peak + skipped > CONFIG_USB_NRFX_EVT_QUEUE_SIZE) ?
++					" -> stock driver would have switched USB off" : "");
++			}
++		}
++	}
++
+ 	while ((ev = usbd_evt_get()) != NULL) {
+ 		if (!dev_ready() && ev->evt_type != USBD_EVT_POWER) {
+ 			/* Drop non-power events when cable is detached. */
+diff --git a/subsys/fs/nvs/nvs.c b/subsys/fs/nvs/nvs.c
+index 8c45757..690baa3 100644
+--- a/subsys/fs/nvs/nvs.c
++++ b/subsys/fs/nvs/nvs.c
+@@ -5,6 +5,7 @@
+  * SPDX-License-Identifier: Apache-2.0
+  */
+ 
++#include <zephyr/kernel.h>
+ #include <zephyr/drivers/flash.h>
+ #include <string.h>
+ #include <errno.h>
+@@ -19,6 +20,10 @@ LOG_MODULE_REGISTER(fs_nvs, CONFIG_NVS_LOG_LEVEL);
+ static int nvs_prev_ate(struct nvs_fs *fs, uint32_t *addr, struct nvs_ate *ate);
+ static int nvs_ate_valid(struct nvs_fs *fs, const struct nvs_ate *entry);
+ 
++/* glove80-usb-drop debug: counters read by the settings timing logs */
++uint32_t nvs_dbg_ate_reads;   /* allocation table entries read from flash */
++uint32_t nvs_dbg_full_walks;  /* lookups that walked the whole table without a match */
++
+ #ifdef CONFIG_NVS_LOOKUP_CACHE
+ 
+ static inline size_t nvs_lookup_cache_pos(uint16_t id)
+@@ -189,6 +194,7 @@ static int nvs_flash_data_wrt(struct nvs_fs *fs, const void *data, size_t len)
+ static int nvs_flash_ate_rd(struct nvs_fs *fs, uint32_t addr,
+ 			     struct nvs_ate *entry)
+ {
++	nvs_dbg_ate_reads++;
+ 	return nvs_flash_rd(fs, addr, entry, sizeof(struct nvs_ate));
+ }
+ 
+@@ -302,7 +308,12 @@ static int nvs_flash_erase_sector(struct nvs_fs *fs, uint32_t addr)
+ #ifdef CONFIG_NVS_LOOKUP_CACHE
+ 	nvs_lookup_cache_invalidate(fs, addr >> ADDR_SECT_SHIFT);
+ #endif
++	uint32_t erase_c0 = k_cycle_get_32();
++
+ 	rc = flash_erase(fs->flash_device, offset, fs->sector_size);
++	LOG_WRN("dbg nvs erase: %u us, thread %s",
++		k_cyc_to_us_floor32(k_cycle_get_32() - erase_c0),
++		k_thread_name_get(k_current_get()) ? k_thread_name_get(k_current_get()) : "?");
+ 
+ 	if (rc) {
+ 		return rc;
+@@ -577,7 +588,21 @@ static int nvs_add_gc_done_ate(struct nvs_fs *fs)
+  * that has just been started. The data to gc is in the sector after this new
+  * sector.
+  */
++static int nvs_gc_impl(struct nvs_fs *fs);
++
+ static int nvs_gc(struct nvs_fs *fs)
++{
++	uint32_t c0 = k_cycle_get_32();
++	uint32_t r0 = nvs_dbg_ate_reads;
++	int rc = nvs_gc_impl(fs);
++
++	LOG_WRN("dbg nvs gc: %u us, %u ATE reads, rc %d, thread %s",
++		k_cyc_to_us_floor32(k_cycle_get_32() - c0), nvs_dbg_ate_reads - r0, rc,
++		k_thread_name_get(k_current_get()) ? k_thread_name_get(k_current_get()) : "?");
++	return rc;
++}
++
++static int nvs_gc_impl(struct nvs_fs *fs)
+ {
+ 	int rc;
+ 	struct nvs_ate close_ate, gc_ate, wlk_ate;
+@@ -1189,6 +1214,9 @@ ssize_t nvs_read_hist(struct nvs_fs *fs, uint16_t id, void *data, size_t len,
+ 
+ 	if (((wlk_addr == fs->ate_wra) && (wlk_ate.id != id)) ||
+ 	    (wlk_ate.len == 0U) || (cnt_his < cnt)) {
++		if ((wlk_addr == fs->ate_wra) && (wlk_ate.id != id)) {
++			nvs_dbg_full_walks++;
++		}
+ 		return -ENOENT;
+ 	}
+ 
+@@ -1267,3 +1295,28 @@ ssize_t nvs_calc_free_space(struct nvs_fs *fs)
+ 	}
+ 	return free_space;
+ }
++
++/* glove80-usb-drop debug: number of allocation table entries a full walk visits */
++uint32_t nvs_dbg_count_ates(struct nvs_fs *fs)
++{
++	uint32_t addr, n = 0;
++	struct nvs_ate ate;
++
++	if (!fs->ready) {
++		return 0;
++	}
++
++	k_mutex_lock(&fs->nvs_lock, K_FOREVER);
++	addr = fs->ate_wra;
++	while (1) {
++		if (nvs_prev_ate(fs, &addr, &ate)) {
++			break;
++		}
++		n++;
++		if (addr == fs->ate_wra) {
++			break;
++		}
++	}
++	k_mutex_unlock(&fs->nvs_lock);
++	return n;
++}
+diff --git a/subsys/settings/src/settings_nvs.c b/subsys/settings/src/settings_nvs.c
+index 8e5bfbf..e12e432 100644
+--- a/subsys/settings/src/settings_nvs.c
++++ b/subsys/settings/src/settings_nvs.c
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ #include <string.h>
+ 
++#include <zephyr/kernel.h>
+ #include <zephyr/settings/settings.h>
+ #include "settings/settings_nvs.h"
+ #include <zephyr/sys/crc.h>
+@@ -118,8 +119,8 @@ static uint16_t settings_nvs_cache_match(struct settings_nvs *cf, const char *na
+ }
+ #endif /* CONFIG_SETTINGS_NVS_NAME_CACHE */
+ 
+-static int settings_nvs_load(struct settings_store *cs,
+-			     const struct settings_load_arg *arg)
++static int settings_nvs_load_impl(struct settings_store *cs,
++				  const struct settings_load_arg *arg)
+ {
+ 	int ret = 0;
+ 	struct settings_nvs *cf = CONTAINER_OF(cs, struct settings_nvs, cf_store);
+@@ -186,8 +187,8 @@ static int settings_nvs_load(struct settings_store *cs,
+ 	return ret;
+ }
+ 
+-static int settings_nvs_save(struct settings_store *cs, const char *name,
+-			     const char *value, size_t val_len)
++static int settings_nvs_save_impl(struct settings_store *cs, const char *name,
++				  const char *value, size_t val_len)
+ {
+ 	struct settings_nvs *cf = CONTAINER_OF(cs, struct settings_nvs, cf_store);
+ 	char rdname[SETTINGS_MAX_NAME_LEN + SETTINGS_EXTRA_LEN + 1];
+@@ -314,6 +315,95 @@ found:
+ 	return 0;
+ }
+ 
++/* glove80-usb-drop debug: time every settings load and save, count the flash
++ * allocation-table reads it costs, and name the thread it ran in. A cooperative
++ * thread that spends this long here keeps the USB driver's work queue waiting.
++ */
++extern uint32_t nvs_dbg_ate_reads;
++extern uint32_t nvs_dbg_full_walks;
++extern uint32_t nvs_dbg_count_ates(struct nvs_fs *fs);
++volatile bool settings_nvs_dbg_quiet;
++
++static const char *dbg_thread_name(void)
++{
++	const char *n = k_thread_name_get(k_current_get());
++
++	return n ? n : "?";
++}
++
++static int settings_nvs_load(struct settings_store *cs,
++			     const struct settings_load_arg *arg)
++{
++	uint32_t c0 = k_cycle_get_32();
++	uint32_t r0 = nvs_dbg_ate_reads, w0 = nvs_dbg_full_walks;
++	int rc = settings_nvs_load_impl(cs, arg);
++
++	if (!settings_nvs_dbg_quiet) {
++		LOG_WRN("dbg settings load %s: %u us, %u ATE reads, %u full walks, thread %s",
++			(arg && arg->subtree) ? arg->subtree : "(all)",
++			k_cyc_to_us_floor32(k_cycle_get_32() - c0), nvs_dbg_ate_reads - r0,
++			nvs_dbg_full_walks - w0, dbg_thread_name());
++	}
++	return rc;
++}
++
++static int settings_nvs_save(struct settings_store *cs, const char *name,
++			     const char *value, size_t val_len)
++{
++	uint32_t c0 = k_cycle_get_32();
++	uint32_t r0 = nvs_dbg_ate_reads, w0 = nvs_dbg_full_walks;
++	int rc = settings_nvs_save_impl(cs, name, value, val_len);
++
++	if (!settings_nvs_dbg_quiet) {
++		LOG_WRN("dbg settings %s %s: %u us, %u ATE reads, %u full walks, thread %s",
++			(value && val_len) ? "save" : "delete", name ? name : "?",
++			k_cyc_to_us_floor32(k_cycle_get_32() - c0), nvs_dbg_ate_reads - r0,
++			nvs_dbg_full_walks - w0, dbg_thread_name());
++	}
++	return rc;
++}
++
++/* Summary of the settings store: name ids in use, empty ids (each costs a
++ * full walk on every load), table size and free space.
++ */
++void settings_nvs_dbg_stats(void)
++{
++	void *storage = NULL;
++	struct nvs_fs *fs;
++	struct settings_nvs *cf;
++	uint32_t c0, r0, w0;
++	int names = 0, empty = 0;
++	char buf;
++
++	if (settings_storage_get(&storage) || !storage) {
++		LOG_WRN("dbg stats: no settings storage");
++		return;
++	}
++	fs = storage;
++	cf = CONTAINER_OF(fs, struct settings_nvs, cf_nvs);
++
++	c0 = k_cycle_get_32();
++	r0 = nvs_dbg_ate_reads;
++	w0 = nvs_dbg_full_walks;
++	for (uint16_t id = cf->last_name_id; id > NVS_NAMECNT_ID; id--) {
++		if (nvs_read(fs, id, &buf, sizeof(buf)) > 0) {
++			names++;
++		} else {
++			empty++;
++		}
++	}
++	uint32_t scan_us = k_cyc_to_us_floor32(k_cycle_get_32() - c0);
++	uint32_t scan_reads = nvs_dbg_ate_reads - r0;
++	uint32_t scan_full = nvs_dbg_full_walks - w0;
++	uint32_t entries = nvs_dbg_count_ates(fs);
++	int free_bytes = (int)nvs_calc_free_space(fs);
++
++	LOG_WRN("dbg stats: last name id %u, %d names, %d empty ids (%u full walks), "
++		"%u table entries, %d bytes free, name scan %u us / %u ATE reads",
++		cf->last_name_id, names, empty, scan_full, entries, free_bytes, scan_us,
++		scan_reads);
++}
++
+ /* Initialize the nvs backend. */
+ int settings_nvs_backend_init(struct settings_nvs *cf)
+ {

@@ -1,0 +1,68 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  glove80-lh-debug:
+    runs-on: ubuntu-24.04
+    env:
+      ZMK_REF: v25.11
+      SDK_VERSION: 0.16.3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache Zephyr SDK
+        id: sdk-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/zephyr-sdk-${{ env.SDK_VERSION }}
+          key: zephyr-sdk-${{ env.SDK_VERSION }}-arm
+
+      - name: Install Zephyr SDK (arm toolchain only)
+        if: steps.sdk-cache.outputs.cache-hit != 'true'
+        run: |
+          base="https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${SDK_VERSION}"
+          curl -sSfL "$base/zephyr-sdk-${SDK_VERSION}_linux-x86_64_minimal.tar.xz" | tar -xJ -C ~
+          curl -sSfL "$base/toolchain_linux-x86_64_arm-zephyr-eabi.tar.xz" | tar -xJ -C ~/zephyr-sdk-${SDK_VERSION}
+
+      - name: Register Zephyr SDK
+        run: ~/zephyr-sdk-${SDK_VERSION}/setup.sh -c
+
+      - name: Install west, cmake and ninja
+        run: pip install west "cmake<4" ninja
+
+      - name: Fetch MoErgo ZMK and its Zephyr
+        run: |
+          git clone --depth 1 -b "$ZMK_REF" https://github.com/moergo-sc/zmk.git zmk
+          cd zmk
+          git apply ../patches/zmk-west-allowlist.patch
+          west init -l app
+          west update --narrow --fetch-opt=--depth=1
+          pip install -r zephyr/scripts/requirements-base.txt
+          echo "zmk $(git rev-parse HEAD)"
+          echo "zephyr $(git -C zephyr rev-parse HEAD)"
+
+      - name: Apply the debug patches
+        run: |
+          cd zmk
+          git apply ../patches/zmk-debug-behavior.patch
+          git -C zephyr apply ../../patches/zephyr-debug-timing.patch
+
+      - name: Build the left half
+        run: |
+          cd zmk
+          west build -p -s app -b glove80_lh -d build/lh -S zmk-usb-logging -- \
+            -DEXTRA_CONF_FILE="$GITHUB_WORKSPACE/config/debug.conf"
+          cp build/lh/zephyr/zmk.uf2 "$GITHUB_WORKSPACE/glove80_lh-debug.uf2"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: glove80_lh-debug
+          path: glove80_lh-debug.uf2

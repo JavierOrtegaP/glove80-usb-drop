@@ -1,0 +1,38 @@
+diff --git a/app/west.yml b/app/west.yml
+index 78aaf71..57169e3 100644
+--- a/app/west.yml
++++ b/app/west.yml
+@@ -12,25 +12,14 @@ manifest:
+       revision: v3.5.0+zmk-fixes
+       clone-depth: 1
+       import:
+-        name-blocklist:
+-          - ci-tools
+-          - hal_altera
+-          - hal_cypress
+-          - hal_infineon
+-          - hal_microchip
+-          - hal_nxp
+-          - hal_openisa
+-          - hal_silabs
+-          - hal_xtensa
+-          - hal_st
+-          - hal_ti
+-          - loramac-node
+-          - mcuboot
+-          - mcumgr
+-          - net-tools
+-          - openthread
+-          - edtt
+-          - trusted-firmware-m
++        # Only the modules a Glove80 build uses (the same list as MoErgo's nix build)
++        name-allowlist:
++          - cmsis
++          - hal_nordic
++          - tinycrypt
++          - lvgl
++          - picolibc
++          - segger
+     - name: nanopb
+       revision: 8c60555d6277a0360c876bd85d491fc4fb0cd74a
+       path: modules/lib/nanopb

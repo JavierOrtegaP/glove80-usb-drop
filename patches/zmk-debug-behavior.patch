@@ -1,0 +1,170 @@
+diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
+index 60c502f..e0e26e0 100644
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -41,6 +41,7 @@ target_sources(app PRIVATE src/events/sensor_event.c)
+ target_sources_ifdef(CONFIG_ZMK_WPM app PRIVATE src/events/wpm_state_changed.c)
+ target_sources_ifdef(CONFIG_USB_DEVICE_STACK app PRIVATE src/events/usb_conn_state_changed.c)
+ target_sources(app PRIVATE src/behaviors/behavior_reset.c)
++target_sources(app PRIVATE src/behaviors/behavior_dbg_nvs.c)
+ target_sources_ifdef(CONFIG_ZMK_EXT_POWER app PRIVATE src/behaviors/behavior_ext_power.c)
+ target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SOFT_OFF app PRIVATE src/behaviors/behavior_soft_off.c)
+ add_subdirectory_ifdef(CONFIG_ZMK_POINTING src/pointing/)
+diff --git a/app/boards/arm/glove80/glove80.keymap b/app/boards/arm/glove80/glove80.keymap
+index 6806be7..404b875 100644
+--- a/app/boards/arm/glove80/glove80.keymap
++++ b/app/boards/arm/glove80/glove80.keymap
+@@ -37,6 +37,12 @@
+             tapping-term-ms = <200>;
+             bindings = <&mo>, <&rgb_ug_status_macro>;
+         };
++
++        // glove80-usb-drop debug: Magic+Z fill, Magic+X measure, Magic+C clean up
++        dbg_nvs: dbg_nvs {
++            compatible = "zmk,behavior-dbg-nvs";
++            #binding-cells = <1>;
++        };
+     };
+ 
+     macros {
+@@ -119,7 +125,7 @@
+             &none             &none               &none           &none           &none           &none                                                                                &none      &none      &none      &none      &none      &none
+             &none             &rgb_ug RGB_SPI     &rgb_ug RGB_SAI &rgb_ug RGB_HUI &rgb_ug RGB_BRI &rgb_ug RGB_TOG                                                                      &none      &none      &none      &none      &none      &none
+             &bootloader       &rgb_ug RGB_SPD     &rgb_ug RGB_SAD &rgb_ug RGB_HUD &rgb_ug RGB_BRD &rgb_ug RGB_EFF                                                                      &none      &none      &none      &none      &none      &bootloader
+-            &sys_reset        &none               &none           &none           &none           &none           &bt_2     &bt_3     &none            &none     &none     &none       &none      &none      &none      &none      &none      &sys_reset
++            &sys_reset        &dbg_nvs 0          &dbg_nvs 1      &dbg_nvs 2      &none           &none           &bt_2     &bt_3     &none            &none     &none     &none       &none      &none      &none      &none      &none      &sys_reset
+             &none             &none               &none           &none           &none                           &bt_0     &bt_1     &out OUT_USB     &none     &none     &none                  &none      &none      &none      &none      &to FACTORY_TEST
+             >;
+         };
+diff --git a/app/dts/bindings/behaviors/zmk,behavior-dbg-nvs.yaml b/app/dts/bindings/behaviors/zmk,behavior-dbg-nvs.yaml
+new file mode 100644
+index 0000000..4be40e1
+--- /dev/null
++++ b/app/dts/bindings/behaviors/zmk,behavior-dbg-nvs.yaml
+@@ -0,0 +1,8 @@
++# glove80-usb-drop debug behavior: grow, measure and clean up the settings store
++# SPDX-License-Identifier: MIT
++
++description: Settings store debug behavior
++
++compatible: "zmk,behavior-dbg-nvs"
++
++include: one_param.yaml
+diff --git a/app/src/behaviors/behavior_dbg_nvs.c b/app/src/behaviors/behavior_dbg_nvs.c
+new file mode 100644
+index 0000000..21fdb24
+--- /dev/null
++++ b/app/src/behaviors/behavior_dbg_nvs.c
+@@ -0,0 +1,112 @@
++/*
++ * glove80-usb-drop debug behavior.
++ *
++ * &dbg_nvs 0  fill: 50 throwaway settings writes ("dbg/fill") from a low-priority
++ *             preemptible thread, to grow the settings log the way months of use do
++ * &dbg_nvs 1  measure: on the system work queue (where ZMK's own saves run) load
++ *             the settings store the way a Bluetooth host connection does, save a
++ *             throwaway setting, then print store statistics
++ * &dbg_nvs 2  clean up: delete the throwaway settings
++ *
++ * SPDX-License-Identifier: MIT
++ */
++
++#define DT_DRV_COMPAT zmk_behavior_dbg_nvs
++
++#include <zephyr/device.h>
++#include <zephyr/kernel.h>
++#include <zephyr/logging/log.h>
++#include <zephyr/settings/settings.h>
++
++#include <drivers/behavior.h>
++#include <zmk/behavior.h>
++
++LOG_MODULE_REGISTER(dbg_nvs, LOG_LEVEL_INF);
++
++#if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
++
++#define DBG_FILL_COUNT 50
++
++extern volatile bool settings_nvs_dbg_quiet;
++void settings_nvs_dbg_stats(void);
++
++static uint32_t fill_total;
++
++static void fill_fn(struct k_work *work) {
++    uint32_t c0 = k_cycle_get_32();
++
++    settings_nvs_dbg_quiet = true;
++    for (int i = 0; i < DBG_FILL_COUNT; i++) {
++        fill_total++;
++        settings_save_one("dbg/fill", &fill_total, sizeof(fill_total));
++    }
++    settings_nvs_dbg_quiet = false;
++    LOG_WRN("dbg fill: %d writes in %u ms (%u this boot)", DBG_FILL_COUNT,
++            k_cyc_to_ms_floor32(k_cycle_get_32() - c0), fill_total);
++    settings_nvs_dbg_stats();
++}
++
++static void measure_fn(struct k_work *work) {
++    uint32_t now = k_uptime_get_32();
++
++    /* Every load walks all stored names whatever the subtree, so this costs the
++     * same as the "bt/ccc/<addr>" load Zephyr does when a bonded host connects. */
++    settings_load_subtree("dbg");
++    settings_save_one("dbg/probe", &now, sizeof(now));
++    settings_nvs_dbg_stats();
++}
++
++static void cleanup_fn(struct k_work *work) {
++    settings_delete("dbg/fill");
++    settings_delete("dbg/probe");
++    settings_nvs_dbg_stats();
++}
++
++K_THREAD_STACK_DEFINE(dbg_nvs_stack, 2048);
++static struct k_work_q dbg_nvs_q;
++static K_WORK_DEFINE(fill_work, fill_fn);
++static K_WORK_DEFINE(measure_work, measure_fn);
++static K_WORK_DEFINE(cleanup_work, cleanup_fn);
++
++static int dbg_nvs_init(const struct device *dev) {
++    k_work_queue_start(&dbg_nvs_q, dbg_nvs_stack, K_THREAD_STACK_SIZEOF(dbg_nvs_stack),
++                       K_PRIO_PREEMPT(10), NULL);
++    k_thread_name_set(&dbg_nvs_q.thread, "dbg_nvs");
++    return 0;
++}
++
++static int on_pressed(struct zmk_behavior_binding *binding,
++                      struct zmk_behavior_binding_event event) {
++    switch (binding->param1) {
++    case 0:
++        k_work_submit_to_queue(&dbg_nvs_q, &fill_work);
++        break;
++    case 1:
++        k_work_submit(&measure_work);
++        break;
++    case 2:
++        k_work_submit_to_queue(&dbg_nvs_q, &cleanup_work);
++        break;
++    default:
++        break;
++    }
++    return ZMK_BEHAVIOR_OPAQUE;
++}
++
++static int on_released(struct zmk_behavior_binding *binding,
++                       struct zmk_behavior_binding_event event) {
++    return ZMK_BEHAVIOR_OPAQUE;
++}
++
++static const struct behavior_driver_api dbg_nvs_api = {
++    .binding_pressed = on_pressed,
++    .binding_released = on_released,
++#if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_METADATA)
++    .get_parameter_metadata = zmk_behavior_get_empty_param_metadata,
++#endif
++};
++
++BEHAVIOR_DT_INST_DEFINE(0, dbg_nvs_init, NULL, NULL, NULL, POST_KERNEL,
++                        CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &dbg_nvs_api);
++
++#endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
