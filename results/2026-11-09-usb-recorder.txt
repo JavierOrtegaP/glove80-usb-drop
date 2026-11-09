@@ -1,0 +1,52 @@
+# USB recorder (tools/usb_watch.ps1), 9 Nov 2026, settings store grown to ~700 NVS entries.
+# Local PC time. 'keyboard USB device' = the left half's USB device node; 'path ADDED/REMOVED: BT' = Windows' Bluetooth HID link.
+
+## Stock v26.09 Factory Default Layout (no patch): boot
+07:32:06.483  CHIPSET port 5: connected 239A:0029 full addr 41 cfg 1 pipes 5  ->  none
+07:32:07.000  CHIPSET port 5: none  ->  enumerating 0000:0000 low addr 0 cfg 0 pipes 0
+07:32:07.335  CHIPSET port 5: enumerating 0000:0000 low addr 0 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 42 cfg 0 pipes 0
+07:32:07.335  keyboard USB device: absent  ->  not-started D3
+07:32:07.439  keyboard input path ADDED: USB
+07:32:07.487  CHIPSET port 5: connected 16C0:27DB full addr 42 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 42 cfg 1 pipes 1
+07:32:07.489  keyboard USB device: not-started D3  ->  started D0
+07:32:07.614  keyboard input path REMOVED: USB
+07:32:07.710  CHIPSET port 5: connected 16C0:27DB full addr 42 cfg 1 pipes 1  ->  none
+07:32:07.710  keyboard USB device: started D0  ->  absent
+07:32:11.772  keyboard input path ADDED: BT
+
+## Stock v26.09: after a replug, Windows Bluetooth off and on
+07:32:59.606  CHIPSET port 5: none  ->  enumerating 0000:0000 low addr 0 cfg 0 pipes 0
+07:32:59.827  CHIPSET port 5: enumerating 0000:0000 low addr 0 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 43 cfg 0 pipes 0
+07:32:59.890  keyboard input path ADDED: USB
+07:32:59.938  CHIPSET port 5: connected 16C0:27DB full addr 43 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 43 cfg 1 pipes 1
+07:32:59.938  keyboard USB device: absent  ->  started D0
+07:33:00.818  key presses this second: USB 2
+07:33:01.805  key presses this second: USB 4
+07:33:02.787  key presses this second: USB 4
+07:33:03.878  key presses this second: USB 1
+07:33:06.297  keyboard input path REMOVED: BT
+07:33:10.249  keyboard input path ADDED: BT
+07:33:10.342  CHIPSET port 5: connected 16C0:27DB full addr 43 cfg 1 pipes 1  ->  connected 0000:0000 low addr 0 cfg 0 pipes 0
+07:33:10.342  keyboard USB device: started D0  ->  started
+07:33:10.342  keyboard input path REMOVED: USB
+07:33:10.450  CHIPSET port 5: connected 0000:0000 low addr 0 cfg 0 pipes 0  ->  none
+07:33:10.450  keyboard USB device: started  ->  absent
+
+## No-SOF build (v25.11 + uf2_patch_sof.py), same store: boot
+07:37:00.579  CHIPSET port 5: connected 239A:0029 full addr 45 cfg 1 pipes 5  ->  none
+07:37:01.124  CHIPSET port 5: none  ->  enumerating 0000:0000 low addr 0 cfg 0 pipes 0
+07:37:01.455  CHIPSET port 5: enumerating 0000:0000 low addr 0 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 46 cfg 0 pipes 0
+07:37:01.455  keyboard USB device: absent  ->  started D0
+07:37:01.493  keyboard input path ADDED: USB
+07:37:01.564  CHIPSET port 5: connected 16C0:27DB full addr 46 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 46 cfg 1 pipes 1
+07:37:07.018  keyboard input path ADDED: BT
+07:37:14.859  key presses this second: USB 4
+
+## No-SOF build: Windows Bluetooth off and on
+07:38:02.452  keyboard input path REMOVED: BT
+07:38:07.262  keyboard input path ADDED: BT
+07:38:09.834  key presses this second: USB 4
+07:38:10.819  key presses this second: USB 5
+07:38:11.801  key presses this second: USB 6
+07:38:12.890  key presses this second: USB 6
+07:38:13.870  key presses this second: USB 13

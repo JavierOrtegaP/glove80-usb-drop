@@ -1,0 +1,129 @@
+# USB recorder, 7 Nov 2026, stock v25.11 (Glorious Engrammer layout), keyboard's settings store as it was after months of use.
+# 'key presses this second' counts presses per path (USB or BT), never which keys. A switch from BT to USB typing marks Magic+USB.
+
+11:21:17.551  CHIPSET port 13: none  ->  enumerating 0000:0000 low addr 0 cfg 0 pipes 0
+11:21:17.877  CHIPSET port 13: enumerating 0000:0000 low addr 0 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 12 cfg 1 pipes 1
+11:21:17.877  keyboard USB device: absent  ->  started D0
+11:21:17.878  keyboard input path ADDED: USB
+11:21:26.062  key presses this second: BT 4
+11:21:27.039  key presses this second: BT 2
+11:21:30.210  CHIPSET port 12: connected 041E:3245 full addr 6 cfg 1 pipes 1  ->  connected 041E:3245 full addr 6 cfg 0 pipes 0
+11:21:30.319  CHIPSET port 12: connected 041E:3245 full addr 6 cfg 0 pipes 0  ->  connected 041E:3245 full addr 6 cfg 1 pipes 1
+11:21:32.064  key presses this second: USB 5
+11:21:33.048  key presses this second: USB 6
+11:21:34.028  key presses this second: USB 6
+11:21:35.011  key presses this second: USB 8
+11:21:35.992  key presses this second: USB 7
+11:21:37.088  key presses this second: USB 8
+11:21:38.071  key presses this second: USB 6
+11:21:39.055  key presses this second: USB 8
+11:21:40.037  key presses this second: USB 8
+11:21:41.019  key presses this second: USB 7
+11:21:41.999  key presses this second: USB 7
+11:21:43.087  key presses this second: USB 7
+11:21:44.071  key presses this second: USB 3
+11:21:45.055  key presses this second: USB 8
+11:21:46.035  key presses this second: USB 7
+11:21:47.015  key presses this second: USB 5
+11:21:47.997  key presses this second: USB 9
+11:21:49.084  key presses this second: USB 6
+11:21:50.071  key presses this second: USB 2
+11:21:51.052  key presses this second: USB 5
+11:21:52.034  key presses this second: USB 7
+11:21:53.015  key presses this second: USB 5
+11:21:53.995  key presses this second: USB 7
+11:21:55.085  key presses this second: USB 7
+11:21:56.065  key presses this second: USB 6
+11:21:57.046  key presses this second: USB 7
+11:21:58.027  key presses this second: USB 2
+11:21:59.011  key presses this second: USB 6
+11:21:59.991  key presses this second: USB 7
+11:22:01.083  key presses this second: USB 6
+11:22:02.066  key presses this second: USB 2
+11:22:03.048  key presses this second: USB 1
+11:22:05.013  key presses this second: USB 1
+11:22:05.996  key presses this second: USB 6
+11:22:07.089  key presses this second: USB 8
+11:22:08.075  key presses this second: USB 5
+11:22:09.058  key presses this second: USB 6
+11:22:10.040  key presses this second: USB 7
+11:22:11.020  key presses this second: USB 10
+11:22:12.007  key presses this second: USB 8
+11:22:12.994  key presses this second: USB 7
+11:22:14.086  key presses this second: USB 7
+11:22:15.067  key presses this second: USB 6
+11:22:16.050  key presses this second: USB 5
+11:22:17.034  key presses this second: USB 3
+11:22:18.012  key presses this second: USB 3
+11:22:18.999  key presses this second: USB 5
+11:22:20.094  key presses this second: USB 6
+11:22:21.074  key presses this second: USB 5
+11:22:22.057  key presses this second: USB 6
+11:22:23.034  key presses this second: USB 4
+11:22:24.016  key presses this second: USB 3
+11:22:25.001  key presses this second: USB 6
+11:22:25.985  key presses this second: USB 5
+11:22:27.082  key presses this second: USB 5
+11:22:27.158  keyboard input path REMOVED: USB
+11:22:27.192  CHIPSET port 13: connected 16C0:27DB full addr 12 cfg 1 pipes 1  ->  none
+11:22:27.192  keyboard USB device: started D0  ->  absent
+
+11:30:08.373  keyboard input path REMOVED: BT
+11:30:25.170  CPU port 1: none  ->  enumerating 0000:0000 low addr 0 cfg 0 pipes 0
+11:30:25.346  keyboard input path ADDED: USB
+11:30:25.391  CPU port 1: enumerating 0000:0000 low addr 0 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 1 cfg 1 pipes 1
+11:30:25.391  keyboard USB device: absent  ->  started D0
+11:30:28.990  key presses this second: USB 1
+11:30:30.075  key presses this second: USB 6
+11:30:31.062  key presses this second: USB 2
+11:30:34.012  key presses this second: USB 1
+11:30:39.030  key presses this second: USB 3
+11:30:40.010  key presses this second: USB 3
+11:30:40.990  key presses this second: USB 8
+11:30:42.086  key presses this second: USB 7
+11:30:43.077  key presses this second: USB 5
+11:30:44.074  key presses this second: USB 4
+11:30:45.055  key presses this second: USB 5
+11:30:46.039  key presses this second: USB 4
+11:30:47.027  key presses this second: USB 4
+11:30:48.009  key presses this second: USB 6
+11:30:48.992  key presses this second: USB 5
+11:30:50.080  key presses this second: USB 4
+11:30:51.065  key presses this second: USB 5
+11:30:52.041  key presses this second: USB 3
+11:30:53.024  key presses this second: USB 4
+11:30:54.001  key presses this second: USB 5
+11:30:55.089  key presses this second: USB 5
+11:30:56.072  key presses this second: USB 3
+11:30:57.056  key presses this second: USB 3
+11:30:58.040  key presses this second: USB 4
+11:30:59.020  key presses this second: USB 3
+11:31:00.000  key presses this second: USB 6
+11:31:01.090  key presses this second: USB 5
+11:31:02.074  key presses this second: USB 2
+11:31:03.054  key presses this second: USB 7
+11:31:04.034  key presses this second: USB 4
+11:31:05.012  key presses this second: USB 5
+11:31:05.991  key presses this second: USB 6
+11:31:07.085  key presses this second: USB 6
+11:31:08.064  key presses this second: USB 7
+11:31:09.047  key presses this second: USB 7
+11:31:11.011  CHIPSET port 12: connected 041E:3245 full addr 6 cfg 1 pipes 1  ->  connected 041E:3245 full addr 6 cfg 1 pipes 2
+11:31:11.011  key presses this second: USB 2
+11:31:11.120  CHIPSET port 12: connected 041E:3245 full addr 6 cfg 1 pipes 2  ->  connected 041E:3245 full addr 6 cfg 1 pipes 1
+11:31:12.571  keyboard input path REMOVED: USB
+11:31:12.645  CPU port 1: connected 16C0:27DB full addr 1 cfg 1 pipes 1  ->  none
+11:31:12.645  keyboard USB device: started D0  ->  absent
+11:31:13.082  key presses this second: USB 4
+11:31:34.265  CPU port 1: none  ->  enumerating 0000:0000 low addr 0 cfg 0 pipes 0
+11:31:34.488  CPU port 1: enumerating 0000:0000 low addr 0 cfg 0 pipes 0  ->  connected 16C0:27DB full addr 1 cfg 1 pipes 1
+11:31:34.490  keyboard input path ADDED: USB
+11:31:34.494  keyboard USB device: absent  ->  started D0
+11:31:37.019  key presses this second: USB 1
+11:31:38.009  key presses this second: USB 1
+11:31:56.023  key presses this second: USB 2
+11:31:57.003  key presses this second: USB 1
+11:31:59.442  keyboard input path ADDED: BT
+11:31:59.601  keyboard input path REMOVED: USB
+11:31:59.623  CPU port 1: connected 16C0:27DB full addr 1 cfg 1 pipes 1  ->  none
+11:31:59.623  keyboard USB device: started D0  ->  absent

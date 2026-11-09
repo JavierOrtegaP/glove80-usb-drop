@@ -1,0 +1,169 @@
+07:23:23.901  waiting for the keyboard's USB serial port
+07:26:50.500  reading COM6
+07:26:50.505  *** Booting Zephyr OS build dacab4875df7 ***
+07:26:50.506  [00:00:00.495,269] <wrn> settings: dbg settings load (all): 6256 us, 1175 ATE reads, 0 full walks, thread main
+07:26:50.508  [00:00:00.500,274] <wrn> zmk: Not sending, not connected to active profile
+07:26:50.509  [00:00:00.500,335] <wrn> zmk: Not sending, not connected to active profile
+07:26:50.510  [00:00:00.698,425] <wrn> settings: dbg settings load bt/ccc/<right-half>: 3875 us, 815 ATE reads, 0 full walks, thread BT RX
+07:26:50.511  [00:00:00.948,974] <wrn> zmk: Not sending, not connected to active profile
+07:26:50.514  [00:00:00.949,005] <wrn> zmk: Not sending, not connected to active profile
+07:26:50.515  [00:00:01.490,905] <wrn> settings: dbg settings save ext_power/state/EXT_POWER: 488 us, 81 ATE reads, 0 full walks, thread sysworkq
+07:26:51.855  [00:00:04.395,019] <wrn> settings: dbg settings load bt/ccc/<pc>: 4241 us, 842 ATE reads, 0 full walks, thread BT RX
+07:27:33.431  [00:00:45.967,468] <wrn> settings: dbg settings load dbg: 3997 us, 815 ATE reads, 0 full walks, thread sysworkq
+07:27:33.432  [00:00:45.969,879] <wrn> usb_nrfx: dbg usb: events waited 5554 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:27:33.434  [00:00:45.983,123] <wrn> settings: dbg settings save dbg/probe: 15533 us, 538 ATE reads, 0 full walks, thread sysworkq
+07:27:33.436  [00:00:45.990,325] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 55 table entries, 27748 bytes free, name scan 2166 us / 472 ATE reads
+07:27:33.438  [00:00:45.990,386] <wrn> usb_nrfx: dbg usb: events waited 7019 us for the work queue, peak 8 of 32 slots, 0 SOF skipped
+07:28:34.182  [00:01:46.719,879] <wrn> settings: dbg settings load dbg: 4394 us, 912 ATE reads, 0 full walks, thread sysworkq
+07:28:34.184  [00:01:46.723,754] <wrn> settings: dbg settings save dbg/probe: 3753 us, 7 ATE reads, 0 full walks, thread sysworkq
+07:28:34.187  [00:01:46.731,231] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 56 table entries, 27748 bytes free, name scan 2227 us / 488 ATE reads
+07:28:34.189  [00:01:46.731,323] <wrn> usb_nrfx: dbg usb: events waited 7141 us for the work queue, peak 8 of 32 slots, 0 SOF skipped
+07:28:35.307  [00:01:47.844,970] <wrn> settings: dbg settings load dbg: 4455 us, 941 ATE reads, 0 full walks, thread sysworkq
+07:28:35.310  [00:01:47.848,846] <wrn> settings: dbg settings save dbg/probe: 3753 us, 6 ATE reads, 0 full walks, thread sysworkq
+07:28:35.313  [00:01:47.856,597] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 57 table entries, 27748 bytes free, name scan 2288 us / 504 ATE reads
+07:28:35.314  [00:01:47.856,689] <wrn> usb_nrfx: dbg usb: events waited 7324 us for the work queue, peak 8 of 32 slots, 0 SOF skipped
+07:28:35.643  [00:01:48.180,114] <wrn> settings: dbg settings load dbg: 4730 us, 972 ATE reads, 0 full walks, thread sysworkq
+07:28:35.644  [00:01:48.183,990] <wrn> settings: dbg settings save dbg/probe: 3753 us, 7 ATE reads, 0 full walks, thread sysworkq
+07:28:35.647  [00:01:48.191,955] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 58 table entries, 27748 bytes free, name scan 2349 us / 520 ATE reads
+07:28:35.649  [00:01:48.192,047] <wrn> usb_nrfx: dbg usb: events waited 7629 us for the work queue, peak 8 of 32 slots, 0 SOF skipped
+07:28:35.895  [00:01:48.433,258] <wrn> settings: dbg settings load dbg: 4882 us, 1003 ATE reads, 0 full walks, thread sysworkq
+07:28:35.898  [00:01:48.433,563] <wrn> usb_nrfx: dbg usb: events waited 5126 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:35.898  [00:01:48.437,133] <wrn> settings: dbg settings save dbg/probe: 3753 us, 8 ATE reads, 0 full walks, thread sysworkq
+07:28:35.902  [00:01:48.445,465] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 59 table entries, 27748 bytes free, name scan 2532 us / 536 ATE reads
+07:28:35.903  [00:01:48.445,556] <wrn> usb_nrfx: dbg usb: events waited 8117 us for the work queue, peak 9 of 32 slots, 0 SOF skipped
+07:28:36.132  [00:01:48.669,250] <wrn> settings: dbg settings load dbg: 4882 us, 1034 ATE reads, 0 full walks, thread sysworkq
+07:28:36.134  [00:01:48.669,555] <wrn> usb_nrfx: dbg usb: events waited 5065 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:36.135  [00:01:48.673,156] <wrn> settings: dbg settings save dbg/probe: 3784 us, 9 ATE reads, 0 full walks, thread sysworkq
+07:28:36.138  [00:01:48.681,823] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 60 table entries, 27748 bytes free, name scan 2502 us / 552 ATE reads
+07:28:36.140  [00:01:48.681,884] <wrn> usb_nrfx: dbg usb: events waited 8422 us for the work queue, peak 9 of 32 slots, 0 SOF skipped
+07:28:36.357  [00:01:48.894,378] <wrn> settings: dbg settings load dbg: 5004 us, 1065 ATE reads, 0 full walks, thread sysworkq
+07:28:36.358  [00:01:48.894,714] <wrn> usb_nrfx: dbg usb: events waited 5187 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:36.364  [00:01:48.898,345] <wrn> settings: dbg settings save dbg/probe: 3814 us, 10 ATE reads, 0 full walks, thread sysworkq
+07:28:36.366  [00:01:48.907,287] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 61 table entries, 27748 bytes free, name scan 2563 us / 568 ATE reads
+07:28:36.368  [00:01:48.907,531] <wrn> usb_nrfx: dbg usb: events waited 8972 us for the work queue, peak 9 of 32 slots, 0 SOF skipped
+07:28:36.569  [00:01:49.107,635] <wrn> settings: dbg settings load dbg: 5218 us, 1096 ATE reads, 0 full walks, thread sysworkq
+07:28:36.571  [00:01:49.107,940] <wrn> usb_nrfx: dbg usb: events waited 5371 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:36.573  [00:01:49.111,572] <wrn> settings: dbg settings save dbg/probe: 3784 us, 11 ATE reads, 0 full walks, thread sysworkq
+07:28:36.575  [00:01:49.120,788] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 62 table entries, 27748 bytes free, name scan 2685 us / 584 ATE reads
+07:28:36.578  [00:01:49.120,849] <wrn> usb_nrfx: dbg usb: events waited 9338 us for the work queue, peak 10 of 32 slots, 0 SOF skipped
+07:28:36.805  [00:01:49.342,773] <wrn> settings: dbg settings load dbg: 5401 us, 1127 ATE reads, 0 full walks, thread sysworkq
+07:28:36.807  [00:01:49.343,078] <wrn> usb_nrfx: dbg usb: events waited 5554 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:36.809  [00:01:49.346,679] <wrn> settings: dbg settings save dbg/probe: 3784 us, 12 ATE reads, 0 full walks, thread sysworkq
+07:28:36.811  [00:01:49.356,231] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 63 table entries, 27748 bytes free, name scan 2655 us / 600 ATE reads
+07:28:36.814  [00:01:49.356,292] <wrn> usb_nrfx: dbg usb: events waited 9643 us for the work queue, peak 10 of 32 slots, 0 SOF skipped
+07:28:37.068  [00:01:49.605,895] <wrn> settings: dbg settings load dbg: 5523 us, 1158 ATE reads, 0 full walks, thread sysworkq
+07:28:37.070  [00:01:49.606,201] <wrn> usb_nrfx: dbg usb: events waited 5615 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:37.072  [00:01:49.609,863] <wrn> settings: dbg settings save dbg/probe: 3814 us, 13 ATE reads, 0 full walks, thread sysworkq
+07:28:37.075  [00:01:49.619,720] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 64 table entries, 27748 bytes free, name scan 2777 us / 616 ATE reads
+07:28:37.077  [00:01:49.619,934] <wrn> usb_nrfx: dbg usb: events waited 9338 us for the work queue, peak 10 of 32 slots, 0 SOF skipped
+07:28:37.297  [00:01:49.834,991] <wrn> settings: dbg settings load dbg: 5584 us, 1189 ATE reads, 0 full walks, thread sysworkq
+07:28:37.300  [00:01:49.835,296] <wrn> usb_nrfx: dbg usb: events waited 5676 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:37.301  [00:01:49.838,897] <wrn> settings: dbg settings save dbg/probe: 3784 us, 14 ATE reads, 0 full walks, thread sysworkq
+07:28:37.304  [00:01:49.849,151] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 65 table entries, 27748 bytes free, name scan 2929 us / 632 ATE reads
+07:28:37.306  [00:01:49.849,212] <wrn> usb_nrfx: dbg usb: events waited 9582 us for the work queue, peak 10 of 32 slots, 0 SOF skipped
+07:28:37.596  [00:01:50.135,162] <wrn> settings: dbg settings load dbg: 5767 us, 1220 ATE reads, 0 full walks, thread sysworkq
+07:28:37.600  [00:01:50.135,528] <wrn> usb_nrfx: dbg usb: events waited 5859 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:37.601  [00:01:50.139,068] <wrn> settings: dbg settings save dbg/probe: 3784 us, 15 ATE reads, 0 full walks, thread sysworkq
+07:28:37.603  [00:01:50.149,627] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 66 table entries, 27748 bytes free, name scan 3021 us / 648 ATE reads
+07:28:37.606  [00:01:50.149,719] <wrn> usb_nrfx: dbg usb: events waited 10070 us for the work queue, peak 11 of 32 slots, 0 SOF skipped
+07:28:37.964  [00:01:50.502,258] <wrn> settings: dbg settings load dbg: 5889 us, 1251 ATE reads, 0 full walks, thread sysworkq
+07:28:37.967  [00:01:50.502,563] <wrn> usb_nrfx: dbg usb: events waited 5859 us for the work queue, peak 6 of 32 slots, 0 SOF skipped
+07:28:37.968  [00:01:50.506,195] <wrn> settings: dbg settings save dbg/probe: 3814 us, 16 ATE reads, 0 full walks, thread sysworkq
+07:28:37.971  [00:01:50.517,028] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 67 table entries, 27748 bytes free, name scan 3082 us / 664 ATE reads
+07:28:37.975  [00:01:50.517,120] <wrn> usb_nrfx: dbg usb: events waited 10375 us for the work queue, peak 11 of 32 slots, 0 SOF skipped
+07:28:38.291  [00:01:50.828,460] <wrn> settings: dbg settings load dbg: 6072 us, 1282 ATE reads, 0 full walks, thread sysworkq
+07:28:38.293  [00:01:50.828,796] <wrn> usb_nrfx: dbg usb: events waited 6042 us for the work queue, peak 7 of 32 slots, 0 SOF skipped
+07:28:38.294  [00:01:50.832,366] <wrn> settings: dbg settings save dbg/probe: 3784 us, 17 ATE reads, 0 full walks, thread sysworkq
+07:28:38.298  [00:01:50.843,444] <wrn> settings: dbg stats: last name id 32784, 16 names, 0 empty ids (0 full walks), 68 table entries, 27748 bytes free, name scan 3021 us / 680 ATE reads
+07:28:38.300  [00:01:50.843,536] <wrn> usb_nrfx: dbg usb: events waited 10742 us for the work queue, peak 11 of 32 slots, 0 SOF skipped
+07:28:42.675  [00:01:55.213,592] <wrn> dbg_nvs: dbg fill: 50 writes in 260 ms (50 this boot)
+07:28:42.678  [00:01:55.254,913] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 120 table entries, 27720 bytes free, name scan 9765 us / 1564 ATE reads
+07:28:42.810  [00:01:55.347,137] <wrn> settings: dbg settings load dbg: 13671 us, 3031 ATE reads, 0 full walks, thread sysworkq
+07:28:42.810  [00:01:55.348,205] <wrn> usb_nrfx: dbg usb: events waited 13854 us for the work queue, peak 14 of 32 slots, 0 SOF skipped
+07:28:42.813  [00:01:55.351,806] <wrn> settings: dbg settings save dbg/probe: 4547 us, 174 ATE reads, 0 full walks, thread sysworkq
+07:28:42.816  [00:01:55.379,058] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 121 table entries, 27720 bytes free, name scan 7019 us / 1581 ATE reads
+07:28:42.818  [00:01:55.379,119] <wrn> usb_nrfx: dbg usb: events waited 26733 us for the work queue, peak 27 of 32 slots, 0 SOF skipped
+07:28:43.517  [00:01:56.035,675] <wrn> dbg_nvs: dbg fill: 50 writes in 299 ms (100 this boot)
+07:28:43.568  [00:01:56.100,646] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 171 table entries, 27720 bytes free, name scan 15136 us / 2431 ATE reads
+07:28:43.581  [00:01:56.154,296] <wrn> settings: dbg settings load dbg: 20904 us, 4661 ATE reads, 0 full walks, thread sysworkq
+07:28:43.594  [00:01:56.155,731] <wrn> usb_nrfx: dbg usb: events waited 22277 us for the work queue, peak 23 of 32 slots, 0 SOF skipped
+07:28:43.596  [00:01:56.159,332] <wrn> settings: dbg settings save dbg/probe: 4943 us, 274 ATE reads, 0 full walks, thread sysworkq
+07:28:43.599  [00:01:56.202,972] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 172 table entries, 27720 bytes free, name scan 10803 us / 2448 ATE reads
+07:28:43.601  [00:01:56.203,094] <wrn> usb_nrfx: dbg usb: events waited 43640 us for the work queue, peak 28 of 32 slots, 16 SOF skipped -> stock driver would have switched USB off
+07:28:44.339  [00:01:56.876,434] <wrn> dbg_nvs: dbg fill: 50 writes in 280 ms (150 this boot)
+07:28:44.341  [00:01:56.964,355] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 222 table entries, 27720 bytes free, name scan 20172 us / 3298 ATE reads
+07:28:44.516  [00:01:57.046,295] <wrn> settings: dbg settings load dbg: 27893 us, 6293 ATE reads, 0 full walks, thread sysworkq
+07:28:44.518  [00:01:57.048,156] <wrn> usb_nrfx: dbg usb: events waited 29541 us for the work queue, peak 28 of 32 slots, 2 SOF skipped
+07:28:44.520  [00:01:57.051,788] <wrn> settings: dbg settings save dbg/probe: 5371 us, 376 ATE reads, 0 full walks, thread sysworkq
+07:28:44.522  [00:01:57.111,724] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 223 table entries, 27720 bytes free, name scan 14587 us / 3315 ATE reads
+07:28:44.525  [00:01:57.111,816] <wrn> usb_nrfx: dbg usb: events waited 60119 us for the work queue, peak 28 of 32 slots, 33 SOF skipped -> stock driver would have switched USB off
+07:28:45.170  [00:01:57.696,563] <wrn> dbg_nvs: dbg fill: 50 writes in 268 ms (200 this boot)
+07:28:45.172  [00:01:57.807,891] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 273 table entries, 27720 bytes free, name scan 25390 us / 4165 ATE reads
+07:28:45.365  [00:01:57.892,395] <wrn> settings: dbg settings load dbg: 35003 us, 7925 ATE reads, 0 full walks, thread sysworkq
+07:28:45.384  [00:01:57.894,714] <wrn> usb_nrfx: dbg usb: events waited 37048 us for the work queue, peak 28 of 32 slots, 10 SOF skipped -> stock driver would have switched USB off
+07:28:45.390  [00:01:57.898,345] <wrn> settings: dbg settings save dbg/probe: 5828 us, 478 ATE reads, 0 full walks, thread sysworkq
+07:28:45.393  [00:01:57.974,853] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 274 table entries, 27720 bytes free, name scan 18310 us / 4182 ATE reads
+07:28:45.395  [00:01:57.974,914] <wrn> usb_nrfx: dbg usb: events waited 76232 us for the work queue, peak 28 of 32 slots, 49 SOF skipped -> stock driver would have switched USB off
+07:28:45.915  [00:01:58.453,094] <wrn> fs_nvs: dbg nvs erase: 85937 us, thread dbg_nvs
+07:28:45.919  [00:01:58.472,320] <wrn> fs_nvs: dbg nvs gc: 106842 us, 1 ATE reads, rc 0, thread dbg_nvs
+07:28:46.318  [00:01:58.661,346] <wrn> usb_nrfx: dbg usb: events waited 44555 us for the work queue, peak 28 of 32 slots, 17 SOF skipped -> stock driver would have switched USB off
+07:28:46.322  [00:01:58.763,519] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 323 table entries, 27720 bytes free, name scan 22064 us / 5032 ATE reads
+07:28:46.325  [00:01:58.763,610] <wrn> usb_nrfx: dbg usb: events waited 92834 us for the work queue, peak 28 of 32 slots, 65 SOF skipped -> stock driver would have switched USB off
+07:28:46.327  [00:01:58.824,645] <wrn> dbg_nvs: dbg fill: 50 writes in 620 ms (250 this boot)
+07:28:46.329  [00:01:58.956,542] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 326 table entries, 27720 bytes free, name scan 31219 us / 5083 ATE reads
+07:28:47.037  [00:01:59.296,447] <wrn> dbg_nvs: dbg fill: 50 writes in 337 ms (300 this boot)
+07:28:47.039  [00:01:59.414,062] <wrn> settings: dbg settings load dbg: 49682 us, 11256 ATE reads, 0 full walks, thread sysworkq
+07:28:47.044  [00:01:59.417,236] <wrn> usb_nrfx: dbg usb: events waited 52368 us for the work queue, peak 28 of 32 slots, 25 SOF skipped -> stock driver would have switched USB off
+07:28:47.045  [00:01:59.420,867] <wrn> settings: dbg settings save dbg/probe: 6683 us, 1299 ATE reads, 0 full walks, thread sysworkq
+07:28:47.046  [00:01:59.531,158] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 377 table entries, 27720 bytes free, name scan 26031 us / 5950 ATE reads
+07:28:47.050  [00:01:59.531,219] <wrn> usb_nrfx: dbg usb: events waited 110351 us for the work queue, peak 28 of 32 slots, 83 SOF skipped -> stock driver would have switched USB off
+07:28:47.052  [00:01:59.675,415] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 376 table entries, 27720 bytes free, name scan 36407 us / 5933 ATE reads
+07:28:47.981  [00:02:00.186,492] <wrn> dbg_nvs: dbg fill: 50 writes in 378 ms (350 this boot)
+07:28:47.981  [00:02:00.302,001] <wrn> settings: dbg settings load dbg: 56579 us, 12885 ATE reads, 0 full walks, thread sysworkq
+07:28:47.985  [00:02:00.305,755] <wrn> usb_nrfx: dbg usb: events waited 59753 us for the work queue, peak 28 of 32 slots, 32 SOF skipped -> stock driver would have switched USB off
+07:28:47.987  [00:02:00.309,326] <wrn> settings: dbg settings save dbg/probe: 7202 us, 1395 ATE reads, 0 full walks, thread sysworkq
+07:28:47.989  [00:02:00.436,004] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 428 table entries, 27720 bytes free, name scan 29846 us / 6817 ATE reads
+07:28:47.993  [00:02:00.436,096] <wrn> usb_nrfx: dbg usb: events waited 126098 us for the work queue, peak 28 of 32 slots, 99 SOF skipped -> stock driver would have switched USB off
+07:28:47.996  [00:02:00.618,927] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 427 table entries, 27720 bytes free, name scan 41778 us / 6800 ATE reads
+07:28:48.597  [00:02:01.030,670] <wrn> dbg_nvs: dbg fill: 50 writes in 358 ms (400 this boot)
+07:28:48.600  [00:02:01.235,748] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 478 table entries, 27720 bytes free, name scan 46966 us / 7667 ATE reads
+07:28:48.840  [00:02:01.307,098] <wrn> settings: dbg settings load dbg: 63598 us, 14517 ATE reads, 0 full walks, thread sysworkq
+07:28:48.870  [00:02:01.311,279] <wrn> usb_nrfx: dbg usb: events waited 67199 us for the work queue, peak 28 of 32 slots, 40 SOF skipped -> stock driver would have switched USB off
+07:28:48.893  [00:02:01.314,880] <wrn> settings: dbg settings save dbg/probe: 7659 us, 890 ATE reads, 0 full walks, thread sysworkq
+07:28:48.911  [00:02:01.457,977] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 479 table entries, 27720 bytes free, name scan 33721 us / 7684 ATE reads
+07:28:48.913  [00:02:01.458,068] <wrn> usb_nrfx: dbg usb: events waited 142883 us for the work queue, peak 28 of 32 slots, 115 SOF skipped -> stock driver would have switched USB off
+07:28:49.685  [00:02:02.095,581] <wrn> dbg_nvs: dbg fill: 50 writes in 398 ms (450 this boot)
+07:28:49.688  [00:02:02.323,699] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 529 table entries, 27720 bytes free, name scan 52001 us / 8534 ATE reads
+07:28:49.948  [00:02:02.401,153] <wrn> settings: dbg settings load dbg: 70678 us, 16149 ATE reads, 0 full walks, thread sysworkq
+07:28:49.975  [00:02:02.405,792] <wrn> usb_nrfx: dbg usb: events waited 74523 us for the work queue, peak 28 of 32 slots, 47 SOF skipped -> stock driver would have switched USB off
+07:28:49.997  [00:02:02.409,423] <wrn> settings: dbg settings save dbg/probe: 8148 us, 992 ATE reads, 0 full walks, thread sysworkq
+07:28:50.030  [00:02:02.569,122] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 530 table entries, 27720 bytes free, name scan 37353 us / 8551 ATE reads
+07:28:50.032  [00:02:02.569,183] <wrn> usb_nrfx: dbg usb: events waited 159790 us for the work queue, peak 28 of 32 slots, 132 SOF skipped -> stock driver would have switched USB off
+07:28:51.180  [00:02:03.220,581] <wrn> dbg_nvs: dbg fill: 50 writes in 415 ms (500 this boot)
+07:28:51.182  [00:02:03.408,142] <wrn> settings: dbg settings load dbg: 77697 us, 17781 ATE reads, 0 full walks, thread sysworkq
+07:28:51.185  [00:02:03.413,177] <wrn> usb_nrfx: dbg usb: events waited 81787 us for the work queue, peak 28 of 32 slots, 54 SOF skipped -> stock driver would have switched USB off
+07:28:51.188  [00:02:03.416,748] <wrn> settings: dbg settings save dbg/probe: 8483 us, 1687 ATE reads, 0 full walks, thread sysworkq
+07:28:51.190  [00:02:03.592,773] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 581 table entries, 27720 bytes free, name scan 41046 us / 9418 ATE reads
+07:28:51.193  [00:02:03.592,834] <wrn> usb_nrfx: dbg usb: events waited 175476 us for the work queue, peak 28 of 32 slots, 148 SOF skipped -> stock driver would have switched USB off
+07:28:51.200  [00:02:03.819,305] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 580 table entries, 27720 bytes free, name scan 57342 us / 9401 ATE reads
+07:28:52.244  [00:02:04.225,494] <wrn> dbg_nvs: dbg fill: 50 writes in 390 ms (550 this boot)
+07:28:52.251  [00:02:04.474,243] <wrn> settings: dbg settings load dbg: 84869 us, 19413 ATE reads, 0 full walks, thread sysworkq
+07:28:52.259  [00:02:04.479,614] <wrn> usb_nrfx: dbg usb: events waited 90087 us for the work queue, peak 28 of 32 slots, 63 SOF skipped -> stock driver would have switched USB off
+07:28:52.261  [00:02:04.483,184] <wrn> settings: dbg settings save dbg/probe: 8819 us, 1799 ATE reads, 0 full walks, thread sysworkq
+07:28:52.267  [00:02:04.675,659] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 632 table entries, 27720 bytes free, name scan 44830 us / 10285 ATE reads
+07:28:52.274  [00:02:04.675,720] <wrn> usb_nrfx: dbg usb: events waited 192199 us for the work queue, peak 28 of 32 slots, 165 SOF skipped -> stock driver would have switched USB off
+07:28:52.281  [00:02:04.878,906] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 631 table entries, 27720 bytes free, name scan 62835 us / 10268 ATE reads
+07:28:52.590  [00:02:05.128,326] <wrn> fs_nvs: dbg nvs erase: 174133 us, thread dbg_nvs
+07:28:52.593  [00:02:05.145,996] <wrn> fs_nvs: dbg nvs gc: 193969 us, 1 ATE reads, rc 0, thread dbg_nvs
+07:28:53.103  [00:02:05.410,827] <wrn> usb_nrfx: dbg usb: events waited 94177 us for the work queue, peak 28 of 32 slots, 67 SOF skipped -> stock driver would have switched USB off
+07:28:53.106  [00:02:05.618,316] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 665 table entries, 27720 bytes free, name scan 47363 us / 10863 ATE reads
+07:28:53.108  [00:02:05.618,408] <wrn> usb_nrfx: dbg usb: events waited 203735 us for the work queue, peak 28 of 32 slots, 176 SOF skipped -> stock driver would have switched USB off
+07:28:53.523  [00:02:05.864,440] <wrn> dbg_nvs: dbg fill: 50 writes in 985 ms (600 this boot)
+07:28:53.525  [00:02:06.160,858] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 684 table entries, 27720 bytes free, name scan 68420 us / 11186 ATE reads
+07:28:54.801  [00:02:06.748,443] <wrn> dbg_nvs: dbg fill: 50 writes in 468 ms (650 this boot)
+07:28:54.803  [00:02:06.870,758] <wrn> settings: dbg settings load dbg: 99334 us, 22760 ATE reads, 0 full walks, thread sysworkq
+07:28:54.804  [00:02:06.877,227] <wrn> usb_nrfx: dbg usb: events waited 105407 us for the work queue, peak 28 of 32 slots, 78 SOF skipped -> stock driver would have switched USB off
+07:28:54.807  [00:02:06.880,828] <wrn> settings: dbg settings save dbg/probe: 9979 us, 2034 ATE reads, 0 full walks, thread sysworkq
+07:28:54.809  [00:02:07.107,147] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 735 table entries, 27720 bytes free, name scan 52551 us / 12053 ATE reads
+07:28:54.812  [00:02:07.107,208] <wrn> usb_nrfx: dbg usb: events waited 226318 us for the work queue, peak 28 of 32 slots, 199 SOF skipped -> stock driver would have switched USB off
+07:28:54.813  [00:02:07.439,544] <wrn> settings: dbg stats: last name id 32785, 17 names, 0 empty ids (0 full walks), 735 table entries, 27720 bytes free, name scan 509033 us / 89318 ATE reads
