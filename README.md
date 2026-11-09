@@ -5,7 +5,7 @@ Why a Glove80 on USB can suddenly disappear from the computer and stay dead unti
 ## Summary
 
 - MoErgo's firmware (every version checked, up to v26.09) turns on USB start-of-frame (SOF) events. Zephyr's nRF USB driver then queues an event every millisecond into a 32-slot pool. If another cooperative thread keeps the CPU for 32 ms, the pool overflows, and the driver switches USB off for good.
-- What keeps the CPU is settings work: loading a Bluetooth host's settings when it connects, and ZMK's debounced saves. With the NVS backend these walk the settings log, so they get slower with every entry the log gains in normal use: about 0.14 ms per entry, crossing 32 ms at roughly 250 entries.
+- What keeps the CPU is settings work: loading a Bluetooth host's settings when it connects, and ZMK's debounced saves. With the NVS backend these walk the settings log, so they get slower with every settings write made since the stored settings were last written or moved: about 0.14 ms per write, crossing 32 ms at roughly 250.
 - On a keyboard whose log had about 700 entries, stock v26.09 dropped USB at startup and at a Bluetooth reconnect. The same keyboard with SOF disabled did not.
 - Fix: remove `select USB_DEVICE_SOF` from `ZMK_USB_BOOT`, as upstream ZMK did in [zmkfirmware/zmk#3070](https://github.com/zmkfirmware/zmk/pull/3070).
 
@@ -46,12 +46,14 @@ The settings store had 17 names, and its table was grown with the debug fill key
 | 530 | 77.7 ms | 17,781 | 81.8 ms: off |
 | 684 | 99.3 ms | 22,760 | 105.4 ms: off |
 
-That's about 0.14 ms per entry, and a single connect-style load crosses the 32-slot limit at roughly 250 entries. That morning the store held only 55 entries, which is why neither stock v25.11 nor stock v26.09 dropped in the first tests that day. With the store left at about 700 entries:
+That's about 0.14 ms per entry, and a single connect-style load crosses the 32-slot limit at roughly 250 entries. That morning the store held only 55 entries, with 27.7 KB of about 28 KB free, because the keyboard's settings had been reset earlier. That's why neither stock v25.11 nor stock v26.09 dropped in the first tests that day. With the store left at about 700 entries:
 
 - **Stock v26.09 (Factory Default Layout, unpatched)** dropped USB 0.22 s after enumerating, during the startup connections. After a replug it dropped 93 ms after Windows reconnected over Bluetooth. A save of `endpoints/preferred` did not drop it, since on this store that name has few names after it.
 - **The no-SOF build (v25.11 plus the one-byte patch)**, with the same store, survived the startup and the Bluetooth reconnect, though each blocks for about 100 ms.
 
-So with SOF on, any keyboard whose settings log has a few hundred entries above its stored settings drops USB on every Bluetooth connect. In normal use the log grows with every saved change (profile and output switches, pairings, lighting) until garbage collection compacts it. That's why the drops come and go. MoErgo v26.09 is affected the same way as v25.11. Turning on the NVS caches would shorten these walks a lot, but a pool that fills every millisecond would still overflow on any other long cooperative work. Removing SOF removes the overflow itself.
+So with SOF on, any keyboard whose settings log has a few hundred entries above its stored settings drops USB on every Bluetooth connect. MoErgo v26.09 is affected the same way as v25.11.
+
+How the log changes over time: NVS is an append-only log over 4 KB sectors of the 32 KB partition, with one sector always kept empty. Every saved change (profile and output switches, pairings, lighting) appends a new copy, and the old copy stays behind as garbage. When the current sector fills, NVS moves to the next one and garbage-collects the oldest sector. It copies that sector's still-current entries to the front of the log and erases the sector. It never compacts the whole log. So the stored settings move to the front only when they are written again (a reset, a new pairing) or when garbage collection reaches their sector, once per pass through the partition. After that, connects are fast for the next few hundred writes, then too slow for the rest of the pass. Garbage collection itself walks the log once for every entry it moves, in whichever thread made the write, so it may be a further long stall (not measured here). Turning on the NVS caches would shorten these walks a lot, but a pool that fills every millisecond would still overflow on any other long cooperative work. Removing SOF removes the overflow itself.
 
 ## Results
 
