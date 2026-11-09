@@ -21,7 +21,28 @@ On the affected keyboard, drops lined up with two settings operations:
 - **60 s after the output changes** (Magic+USB, or a Bluetooth profile key, whose macro also runs `&out OUT_BLE`), ZMK saves `endpoints/preferred` on the system work queue (`CONFIG_ZMK_SETTINGS_SAVE_DEBOUNCE`). Five drops came exactly 60 s after Magic+USB.
 - **When a bonded Bluetooth host connects**, Zephyr loads that host's CCC settings in the BT RX thread (`bt_gatt_connected`). One drop came 0.16 s after Windows reconnected over Bluetooth, and the Go60 log in PR #46 shows the overflow right before the Bluetooth "Connected" messages.
 
-Both go through the NVS settings backend with `CONFIG_SETTINGS_NVS_NAME_CACHE` and `CONFIG_NVS_LOOKUP_CACHE` off. Every lookup then walks the NVS allocation table back from the newest entry, and every load reads every stored name. After the keyboard's Bluetooth pairings were cleared and redone, neither stock v25.11 nor stock v26.09 dropped any more, and a host-side probe saw no stall of 13 ms or more. The working explanation is that the stall length depends on how much is stored and where it sits in the NVS log. The debug build is there to measure that directly.
+Both go through the NVS settings backend with `CONFIG_SETTINGS_NVS_NAME_CACHE` and `CONFIG_NVS_LOOKUP_CACHE` off. Every lookup walks the NVS allocation table back from the newest entry until it finds the id, and every load (including the per-host `bt/ccc/<addr>` load on connect) reads the name and value of every stored setting. So each operation costs time in proportion to how many log entries were written after the settings it touches. They run in cooperative threads (the system work queue, BT RX), so for that whole time the USB driver's work queue can't run.
+
+## Measured (debug build, 9 Nov 2026)
+
+Settings store with 17 names. The table entries were grown with the debug fill key. "Load" is the same walk a host connect does, run on the system work queue. "USB waited" is how long the USB driver's queued events waited for its work queue during that load.
+
+| NVS table entries | Load | ATE reads | USB waited |
+| --- | --- | --- | --- |
+| 60 | 5.0 ms | 1,065 | 5.2 ms |
+| 120 | 13.7 ms | 3,031 | 13.9 ms |
+| 171 | 20.9 ms | 4,661 | 22.3 ms |
+| 222 | 27.9 ms | 6,293 | 29.5 ms |
+| 273 | 35.0 ms | 7,925 | 37.0 ms: the stock driver would switch USB off |
+| 530 | 77.7 ms | 17,781 | 81.8 ms: off |
+| 684 | 99.3 ms | 22,760 | 105.4 ms: off |
+
+About 0.14 ms per entry. A single connect-style load crosses the 32-slot limit at roughly 250 entries. The keyboard's store held only 55 entries that morning, which is why nothing reproduced earlier that day. With the store left at about 700 entries:
+
+- **Stock v26.09 (Factory Default Layout, unpatched)** dropped USB 0.22 s after enumerating, during the startup connections. After a replug it dropped 93 ms after Windows reconnected over Bluetooth. A save of `endpoints/preferred` did not drop it: a save only scans the names stored after the one being saved, so it depends on where that name sits in the list.
+- **The no-SOF build (v25.11 plus the one-byte patch)**, with the same store, survived the startup and the Bluetooth reconnect, which block for about 100 ms.
+
+So any keyboard whose settings log has a few hundred entries above its stored settings will drop USB on every Bluetooth connect, and in normal use the log grows with every saved change. MoErgo v26.09 is affected the same way as v25.11. Removing `select USB_DEVICE_SOF` (#3070) removes the overflow. Enabling the NVS caches would shorten the stalls, but that only moves the threshold.
 
 ## The debug build
 
